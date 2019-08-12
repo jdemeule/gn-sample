@@ -1,0 +1,6 @@
+executable("gn-sample") {
+  sources = [
+    "main.cpp",
+  ]
+  deps = []
+}

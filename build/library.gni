@@ -1,0 +1,71 @@
+template("library") {
+  name = target_name
+  config(name + "_config") {
+      defines = []
+      # include_dirs = [third_party+"/include"]
+      # lib_dirs = [third_party+"/lib"]
+      # lib_dirs += ["third_party"+"/lib64"]
+      include_dirs = []
+      lib_dirs = []
+      ldflags = []
+      if (defined(invoker.defines)) {
+        defines += invoker.defines
+      }
+      if (defined(invoker.include_dirs)) {
+        include_dirs += invoker.include_dirs
+      }
+      if (defined(invoker.lib_dirs)) {
+        lib_dirs += invoker.lib_dirs
+      }
+      if (defined(invoker.ldflags)) {
+        ldflags += invoker.ldflags
+      }
+  }
+  source_set(name) {
+    deps = []
+    all_dependent_configs = [":${name}_config"]
+    if (defined(invoker.public_configs)) {
+      public_configs += invoker.public_configs
+    }
+    if (defined(invoker.deps)) {
+      deps += invoker.deps
+    }
+    if (defined(invoker.public_deps)) {
+      public_deps = invoker.public_deps
+    }
+    if (defined(invoker.libs)) {
+      libs = invoker.libs
+    }
+
+    copy_sources = []
+
+    if (defined(invoker.lib_files)) {
+      # copy_sources += process_file_template(invoker.lib_files, third_party+"/lib/{{source_file_part}}")
+      copy_sources += invoker.lib_files
+    }
+ 
+    if (copy_sources != []) {
+        copy(name + "_copy") {
+            sources = copy_sources
+            outputs = [ "$root_build_dir/lib/{{source_file_part}}" ]
+        }
+        deps += [":${name}_copy"]
+    } else {
+      not_needed(copy_sources)
+    }
+  }
+
+  source_set(name + "_static") {
+      all_dependent_configs = [":${name}_config"]
+      if (defined(invoker.public_configs)) {
+        public_configs += invoker.public_configs
+      }
+      if (defined(invoker.static_deps)) {
+        deps = invoker.static_deps
+      }
+      if (defined(invoker.static_libs)) {
+        #libs = process_file_template(invoker.static_libs, third_party+"/lib/{{source_file_part}}")
+        libs = invoker.static_libs
+      }
+  }
+}

@@ -1,0 +1,48 @@
+# This file defines a template for adding a unittest binary.
+#
+# It's a thin wrapper around GN's built-in executable() target type and
+# accepts the same parameters, and in addition this paramater:
+#
+#   has_custom_main (optional)
+#       [bool] If set, link against gtest instead of UnitTestMain; for tests
+#              that define their own main() function.
+#
+# Example use:
+#
+#   unittest("FormatTest") {
+#     sources = [ ... ]
+#     ...
+#   }
+import("//build/toolchain/compiler.gni")
+
+template("unittest") {
+  executable(target_name) {
+    has_custom_main = false  # Default value.
+
+    # Foward everything (has_custom_main if set; configs, sources, deps, ...).
+    forward_variables_from(invoker, "*")
+    assert(!defined(invoker.output_dir), "cannot set unittest output_dir")
+    assert(!defined(invoker.testonly), "cannot set unittest testonly")
+
+    output_dir = target_out_dir
+
+    if (!defined(invoker.deps)) {
+      deps = []
+    }
+    if (has_custom_main) {
+      deps += [
+        "//thirdparty/gtest:googletest"
+      ]
+    } else {
+      deps += [
+        "//thirdparty/gtest:googletest",
+        "//thirdparty/gtest:googletest_main"
+      ]
+    }
+    testonly = true
+  }
+}
+
+set_defaults("unittest") {
+  configs = shared_binary_target_configs
+}

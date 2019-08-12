@@ -1,0 +1,17 @@
+import("//build/unittest.gni")
+
+unittest("DummyTest") {
+  sources = [
+    "DummyTest.cpp",
+  ]
+}
+
+# executable("DummyTest") {
+#   sources = [
+#     "DummyTest.cpp",
+#   ]
+#   deps = [
+#     "//thirdparty/gtest:googletest",
+#     "//thirdparty/gtest:googletest_main"
+#   ]
+# }
