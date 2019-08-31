@@ -1,100 +1,22 @@
-import("//build/library.gni")
-
-library("googletest") {
-  defines = [
-    "GTEST_HAS_PTHREAD=1"
-  ]
-  include_dirs = [
-    "/Users/dj_mulder/.conan/data/gtest/1.8.0/bincrafters/stable/package/b9a1cc8221294c735988f56e5527f8d2adc8e499/include"
-  ]
-  lib_files = [
-    "/Users/dj_mulder/.conan/data/gtest/1.8.0/bincrafters/stable/package/b9a1cc8221294c735988f56e5527f8d2adc8e499/lib/libgtest.a",
-    "/Users/dj_mulder/.conan/data/gtest/1.8.0/bincrafters/stable/package/b9a1cc8221294c735988f56e5527f8d2adc8e499/lib/libgmock.a"
-  ]
-  lib_dirs = [
-    # "/Users/dj_mulder/.conan/data/gtest/1.8.0/bincrafters/stable/package/b9a1cc8221294c735988f56e5527f8d2adc8e499/lib"
-  ]
-  libs = [
-    "gtest",
-    "gmock"
-  ]
-  ldflags = [
-    "-L/Users/dj_mulder/.conan/data/gtest/1.8.0/bincrafters/stable/package/b9a1cc8221294c735988f56e5527f8d2adc8e499/lib"
-  ]
-  deps = [
-  ]
+config("googletest_config") {
+  visibility = [ ":googletest" ]
+  libs = [ "gtest", "gmock" ]
+  include_dirs = [ "/Users/dj_mulder/.conan/data/gtest/1.8.0/bincrafters/stable/package/b9a1cc8221294c735988f56e5527f8d2adc8e499/include" ]
+  lib_dirs = [ "/Users/dj_mulder/.conan/data/gtest/1.8.0/bincrafters/stable/package/b9a1cc8221294c735988f56e5527f8d2adc8e499/lib" ]
 }
 
-library("googletest_main") {
-  defines = [
-    "GTEST_HAS_PTHREAD=1"
-  ]
-  include_dirs = [
-    "/Users/dj_mulder/.conan/data/gtest/1.8.0/bincrafters/stable/package/b9a1cc8221294c735988f56e5527f8d2adc8e499/include"
-  ]
-  lib_files = [
-    "/Users/dj_mulder/.conan/data/gtest/1.8.0/bincrafters/stable/package/b9a1cc8221294c735988f56e5527f8d2adc8e499/lib/libgtest_main.a",
-    "/Users/dj_mulder/.conan/data/gtest/1.8.0/bincrafters/stable/package/b9a1cc8221294c735988f56e5527f8d2adc8e499/lib/libgmock_main.a"
-  ]
-  lib_dirs = [
-    # "/Users/dj_mulder/.conan/data/gtest/1.8.0/bincrafters/stable/package/b9a1cc8221294c735988f56e5527f8d2adc8e499/lib"
-  ]
-  ldflags = [
-    "-L/Users/dj_mulder/.conan/data/gtest/1.8.0/bincrafters/stable/package/b9a1cc8221294c735988f56e5527f8d2adc8e499/lib"
-  ]
-  libs = [
-    "gtest_main",
-    "gmock_main"
-  ]
-  deps = [
-  ]
+group("googletest") {
+  public_configs = [ ":googletest_config" ]
 }
 
-# config("gtest_include") {
-#   include_dirs = [ "/Users/dj_mulder/.conan/data/gtest/1.8.0/bincrafters/stable/package/b9a1cc8221294c735988f56e5527f8d2adc8e499/include" ]
-#   defines = []
-#   cflags_c = []
-#   cflags_cc = []
-#   visibility = [ ":include" ]
-# }
+config("googletest_main_config") {
+  visibility = [ ":googletest_main" ]
+  libs = [ "gtest_main", "gmock_main" ]
+  include_dirs = [ "/Users/dj_mulder/.conan/data/gtest/1.8.0/bincrafters/stable/package/b9a1cc8221294c735988f56e5527f8d2adc8e499/include" ]
+  lib_dirs = [ "/Users/dj_mulder/.conan/data/gtest/1.8.0/bincrafters/stable/package/b9a1cc8221294c735988f56e5527f8d2adc8e499/lib" ]
+}
 
-# config("gtest_runtime_path") {
-#   lib_dirs = [ "/Users/dj_mulder/.conan/data/gtest/1.8.0/bincrafters/stable/package/b9a1cc8221294c735988f56e5527f8d2adc8e499/lib" ]
-#   ldflags = []
-#   visibility = [ ":runtime_path" ]
-# }
-
-# config("gtest_lib_gmock_main") {
-#   libs = [ "gmock_main" ]
-#   visibility = [ ":gmock_main" ]
-# }
-
-# config("gtest_lib_gmock") {
-#   libs = [ "gmock" ]
-#   visibility = [ ":gmock" ]
-# }
-
-# config("gtest_lib_gtest") {
-#   libs = [ "gtest" ]
-#   visibility = [ ":gtest" ]
-# }
-
-# group("include") {
-#   public_configs = [ ":gtest_include" ]
-# }
-
-# group("runtime_path") {
-#   public_configs = [ ":gtest_runtime_path" ]
-# }
-
-# group("gmock_main") {
-#   public_configs = [ ":gtest_lib_gmock_main" ]
-# }
-
-# group("gmock") {
-#   public_configs = [ ":gtest_lib_gmock" ]
-# }
-
-# group("gtest") {
-#   public_configs = [ ":gtest_lib_gtest" ]
-# }
+group("googletest_main") {
+  public_configs = [ ":googletest_main_config" ]
+  public_deps = [ ":googletest" ]
+}

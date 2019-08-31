@@ -1,9 +1,6 @@
 #include <iostream>
-#include <string>
 
-void print(std::string value) {
-  std::cout << "Hello " + value << "\n";
-}
+#include "mylib.hpp"
 
 int main(int argc, char** argv) {
   print("world");

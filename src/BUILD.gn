@@ -1,6 +1,10 @@
+shared_library("mylib") {
+  sources = [ "mylib.cpp" ]
+}
+
 executable("gn-sample") {
   sources = [
     "main.cpp",
   ]
-  deps = []
+  deps = [":mylib"]
 }
